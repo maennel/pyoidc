@@ -21,7 +21,7 @@ dist
 doc/_build
 
 # Remaining stuff
-oidc_example/op2/client_db.db
+oidc_example/op2/client_db
 oidc_example/op2/config.py
 oidc_example/op2/modules/base.mako.py
 oidc_example/op2/modules/login.mako.py

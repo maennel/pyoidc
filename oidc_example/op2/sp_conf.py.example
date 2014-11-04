@@ -109,7 +109,7 @@ CONFIG = {
     "cert_file": WORKING_DIR+"sp_cert/localhost.crt",
     "xmlsec_binary": xmlsec_path,
     "metadata": {
-        "local": ["[..]/pysaml2/example/idp2/idp.xml"],
+        "local": ["./sp.xml"],
         #"remote": [{"url": "http://localhost/idp.xml", "cert": None}],
     },
     "name_form": NAME_FORMAT_URI,
