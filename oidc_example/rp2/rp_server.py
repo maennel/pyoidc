@@ -108,7 +108,7 @@ class Session(object):
         self.session["provider"] = value
 
     def get_acr_values(self):
-        return self.session.get("acrvalues", None)
+        return self.session.get("acrvalues", {})
 
     def set_acr_values(self, value):
         self.session["acrvalues"] = value
@@ -216,7 +216,7 @@ def application(environ, start_response):
         if "acr" in query and query["acr"][0] in session.get_acr_values():
             func = getattr(RP, "create_authnrequest")
             return func(environ, SERVER_ENV, start_response, session,
-                        query["acr"][0])
+                        query["acr"][0], session.getState())
 
     if session.getClient() is not None:
         session.setCallback(True)

@@ -39,7 +39,7 @@ Run RP3:
 Open a Terminal::
 
     cd [your path]/pyoidc/oidc_example/rp3
-    python rp.py conf
+    python rp_server.py conf
 
 Note that you should not have the .py extension on the conf.py while running the program
 

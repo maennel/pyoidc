@@ -21,7 +21,7 @@ The folder [your path]/pyoidc/oidc_example/op2 contains a file named oc_config.p
    unchanged ``config.py``)
 
 #. Prepare account metadata for the Identity Provider (IdP)
-   by running ``make_metadata.py sp_conf > ./sp.xml`` inside the ``op2`` directory
+   by running ``make_metadata.py sp_conf > ./testpyoidcsp.xml`` inside the ``op2`` directory
 
 Run OP2:
 ********
