@@ -27,9 +27,15 @@ oidc_example/op2/modules/base.mako.py
 oidc_example/op2/modules/login.mako.py
 oidc_example/op2/modules/root.mako.py
 oidc_example/op2/modules/unauthorized.mako.py
-oidc_example/op2/sp.xml
+oidc_example/op2/testpyoidcsp.xml
 oidc_example/op2/sp_cert/tmp_mycert.pem
 oidc_example/op2/sp_cert/tmp_mykey.pem
 oidc_example/op2/sp_conf.py
 oidc_example/op2/static/jwks.json
 update
+
+oidc_example/rp2/modules
+oidc_example/rp2/conf.py
+
+oidc_example/rp3/modules
+oidc_example/rp3/conf.py
