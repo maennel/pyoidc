@@ -403,13 +403,16 @@ class Provider(AProvider):
                     if not comparision_type:
                         comparision_type = "exact"
 
+                if not isinstance(areq["acr_values"], list):
+                    areq["acr_values"] = [areq["acr_values"]]
                 for acr in areq["acr_values"]:
                     res = self.authn_broker.pick(acr, comparision_type)
                     if res:
+                        logger.debug("Picked AuthN broker for ACR %s: %s" % (str(acr), str(res)))
                         #Return the best guess by pick.
                         return res[0]
-        except KeyError:
-            pass
+        except KeyError as exc:
+            logger.debug("An error occured whil picking the authN broker: %s" % str(exc))
 
         # return the best I have
         return None, None
@@ -419,11 +422,13 @@ class Provider(AProvider):
             redirect_uri = areq["post_logout_redirect_uri"]
             authn, acr = self.pick_auth(areq)
             uid = authn.authenticated_as(cookie)["uid"]
-            client_info = self.cdb[self.sdb.getClient_id(uid)]
-            if redirect_uri in client_info["post_logout_redirect_uris"]:
+            client_info = self.cdb[self.sdb.get_client_id(uid)]
+
+            uris = [ci_uri for ci_uri, ci_arg in client_info["post_logout_redirect_uris"]]
+            if redirect_uri in uris:
                 return redirect_uri
-        except:
-            pass
+        except Exception as exc:
+            logger.debug("An error occurred while verifying redir URI: %s" % str(exc))
         return None
 
     def is_session_revoked(self, request="", cookie=None):
@@ -460,7 +465,7 @@ class Provider(AProvider):
         esr = EndSessionRequest().from_urlencoded(request)
         redirect_uri = self.verify_post_logout_redirect_uri(esr, cookie)
         if not redirect_uri:
-            return self._error_response("Not allowed!")
+            return self._error_response("Not allowed (Post logout redirect URI verification failed)!")
 
         authn, acr = self.pick_auth(esr)
 
@@ -474,7 +479,7 @@ class Provider(AProvider):
             try:
                 uid = identity["uid"]
             except KeyError:
-                return self._error_response("Not allowed!")
+                return self._error_response("Not allowed (UID could not be retrieved)!")
 
         #if self.sdb.get_verified_logout(uid):
         #    return self.let_user_verify_logout(uid, esr, cookie, redirect_uri)

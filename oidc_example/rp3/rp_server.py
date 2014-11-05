@@ -143,8 +143,10 @@ def application(environ, start_response):
         else:
             return opresult(environ, start_response, userinfo)
     elif path == "logout":  # After the user has pressed the logout button
+        LOGGER.debug("Logging out from session: %s" % str(session))
         client = CLIENTS[session["op"]]
         logout_url = client.endsession_endpoint
+        LOGGER.debug("Logout URL: %s" % str(logout_url))
         try:
             # Specify to which URL the OP should return the user after
             # log out. That URL must be registered with the OP at client
@@ -161,6 +163,8 @@ def application(environ, start_response):
                 logout_url += "&" + urllib.urlencode({
                     "id_token_hint": id_token_as_signed_jwt(client, _idtoken,
                                                             "HS256")})
+            # Also append the ACR values
+            logout_url += "&" + urllib.urlencode({"acr_values": ACR_VALUES}, True)
 
         clear_session(session)
         resp = Redirect(str(logout_url))
